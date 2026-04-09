@@ -37,7 +37,7 @@ def main(args):
         validation_split=0.2
     )
 
-    model.save("models/att/{}".format(args.model))
+    model.save(f"models/att/{args.model}.keras")
 
 
 if __name__ == "__main__":

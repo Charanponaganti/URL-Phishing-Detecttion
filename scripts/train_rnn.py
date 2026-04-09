@@ -37,7 +37,7 @@ def main(args):
         validation_split=0.2
     )
 
-    model.save("models/rnn/{}".format(args.model))
+    model.save(f"models/rnn/{args.model}.keras")
 
 
 if __name__ == "__main__":
