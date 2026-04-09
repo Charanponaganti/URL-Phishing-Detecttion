@@ -1,0 +1,9 @@
+numpy
+matplotlib
+seaborn
+Keras
+scikit_learn
+mlflow
+keras_self_attention
+tensorflow
+
