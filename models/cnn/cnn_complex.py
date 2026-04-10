@@ -1,8 +1,10 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten
-from tensorflow.keras.layers import Conv1D, MaxPooling1D,GlobalMaxPooling1D    
+from tensorflow.keras.layers import (
+    Dense, Dropout,
+    Conv1D, MaxPooling1D, GlobalMaxPooling1D,
+    BatchNormalization, Embedding
+)
 
-from tensorflow.keras.layers import Embedding
 
 class CnnComplex:
     def __init__(self, embed_dim: int, sequence_length: int):
@@ -10,40 +12,42 @@ class CnnComplex:
         self.sequence_length = sequence_length
 
     def build(self, char_index: dict) -> Sequential:
-        voc_size=len(char_index)
+        voc_size = len(char_index)
         print(f"[CnnComplex] voc_size: {voc_size}")
-        model=Sequential(name="cnn_complex")
-        model.add(Embedding(voc_size+1,self.embed_dim,input_length=self.sequence_length,name="embedding"))
 
-        #block1
-        model.add(Conv1D(128,3,activation="tanh",name="conv1")
-                  )
-        model.add(MaxPooling1D(3,name="pool1"))
+        model = Sequential(name="cnn_complex")
 
-        model.add(Conv1D(256, 7, activation="tanh", padding="same", name="conv2"))
-        model.add(Conv1D(96,  5, activation="tanh", padding="same", name="conv3"))
-        model.add(Conv1D(128, 3, activation="tanh", padding="same", name="conv4"))
-        model.add(MaxPooling1D(3, name="pool2"))
+        # ── Embedding ─────────────────────────────────────────────────────────
+        # Keep embed_dim small (16–32) on CPU — e.g. CnnComplex(embed_dim=16, ...)
+        model.add(Embedding(
+            voc_size + 1, self.embed_dim,
+            input_length=self.sequence_length,
+            name="embedding"
+        ))
 
-        model.add(Conv1D(196, 5, activation="tanh", padding="same", name="conv5"))
-        model.add(Conv1D(128, 3, activation="tanh", padding="same", name="conv6"))
-        model.add(Conv1D(96,  5, activation="tanh", padding="same", name="conv7"))
-        model.add(Conv1D(128, 3, activation="tanh", padding="same", name="conv8"))
-        model.add(Conv1D(196, 5, activation="tanh", padding="same", name="conv9"))
-        model.add(Conv1D(128, 7, activation="tanh", padding="same", name="conv10"))
-        model.add(Conv1D(96,  3, activation="tanh", padding="same", name="conv11"))
-        model.add(MaxPooling1D(3, name="pool3"))
+        # ── Block 1 — local features (kernel 3) ───────────────────────────────
+        model.add(Conv1D(64, 3, activation="relu", padding="same", name="conv1"))
+        model.add(BatchNormalization(name="bn1"))
+        model.add(MaxPooling1D(2, name="pool1"))   # halves sequence length
+        model.add(Dropout(0.2, name="drop1"))
 
-        model.add(Conv1D(196, 5, activation="tanh", padding="same", name="conv12"))
-        model.add(Conv1D(128, 7, activation="tanh", padding="same", name="conv13"))
-        model.add(MaxPooling1D(3, name="pool4"))
+        # ── Block 2 — mid-range features (kernel 5) ───────────────────────────
+        model.add(Conv1D(128, 5, activation="relu", padding="same", name="conv2"))
+        model.add(BatchNormalization(name="bn2"))
+        model.add(MaxPooling1D(2, name="pool2"))   # halves again
+        model.add(Dropout(0.2, name="drop2"))
 
-        model.add(Conv1D(196, 5, activation="tanh", padding="same", name="conv14"))
-        model.add(Conv1D(128, 7, activation="tanh", padding="same", name="conv15"))
-        model.add(Conv1D(96,  3, activation="tanh", padding="same", name="conv16"))
+        # ── Block 3 — higher-level features (kernel 3) ────────────────────────
+        model.add(Conv1D(256, 3, activation="relu", padding="same", name="conv3"))
+        model.add(BatchNormalization(name="bn3"))
+        model.add(Dropout(0.3, name="drop3"))
 
-        # --- output ---
-        model.add(Flatten(name="flatten"))
+        # ── Global pooling — collapses sequence dim entirely ──────────────────
+        model.add(GlobalMaxPooling1D(name="global_pool"))
+
+        # ── Classifier head ───────────────────────────────────────────────────
+        model.add(Dense(128, activation="relu", name="dense1"))
+        model.add(Dropout(0.3, name="drop4"))
         model.add(Dense(1, activation="sigmoid", name="output"))
 
         return model

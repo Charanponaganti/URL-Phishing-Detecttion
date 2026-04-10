@@ -1,1 +1,0 @@
-evaluate.py --category baseline --model cnn_base

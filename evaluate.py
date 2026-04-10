@@ -199,12 +199,12 @@ def main(args):
 
     # ---- Feature extraction --------------------------------------
     fe = FeatureExtractor(char_index_path="dataset/char_index")
-    fe.load_from_file("dataset/train/small_train.txt")
+    fe.load_from_file("dataset/train/train.txt")
     x_train = fe.get_sequences(sequence_length=args.sequence_length)
     y_train = fe.get_labels()
 
     fe_test = FeatureExtractor(char_index_path="dataset/char_index")
-    fe_test.load_from_file("dataset/test/small_test.txt")
+    fe_test.load_from_file("dataset/test/test.txt")
     x_test = fe_test.get_sequences(sequence_length=args.sequence_length)
     y_test = fe_test.get_labels()
 
