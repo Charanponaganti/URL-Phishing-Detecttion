@@ -4,9 +4,7 @@ from urllib.parse import urlparse
 import re
 from feature_extraction import FeatureExtractor
 
-# =========================
-# SAME FEATURE FUNCTION (VERY IMPORTANT)
-# =========================
+#using the same feature extractor
 extractor = FeatureExtractor()
 def extract_features(url):
     features = []
@@ -18,15 +16,11 @@ def extract_features(url):
     return features
 
 
-# =========================
-# LOAD SCALER
-# =========================
+#using the same scaler
 
 scaler = joblib.load(r"output_data\feature_scaler.joblib")
 
-# =========================
-# LOAD MODELS
-# =========================
+#models
 
 models = {
     "RF": joblib.load(r"output_data\RF\RF_model.joblib"),
@@ -35,32 +29,26 @@ models = {
     "NB": joblib.load(r"output_data\NB\NB_model.joblib")
 }
 
-# =========================
-# INPUT
-# =========================
 
+#input parsing
 url = input("Enter URL: ").strip().lower()
 url = url.replace("http://", "").replace("https://", "")
 
-# =========================
-# PROCESS
-# =========================
+
 
 features = extract_features(url)
 features = np.array(features).reshape(1, -1)
 
-# scale (important)
+# scale 
 features = scaler.transform(features)
 
-# =========================
-# PREDICT
-# =========================
 
-print("\n🔍 Predictions:\n")
+
+print("\n Predictions:\n")
 
 for name, model in models.items():
     pred = model.predict(features)[0]
 
-    label = "Phishing ⚠️" if pred == 0 else "Legitimate ✅"
+    label = "Phishing " if pred == 0 else "Legitimate "
 
     print(f"{name}: {label}")

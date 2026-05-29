@@ -16,7 +16,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # -------- FUNCTION -------- #
 
 def process_split(split_name):
-    print(f"\n🔄 Processing {split_name}...")
+    print(f"\n Processing {split_name}...")
 
     file_path = os.path.join(DATA_ROOT, split_name, f"{split_name}.txt")
 
@@ -30,7 +30,7 @@ def process_split(split_name):
     np.save(os.path.join(OUTPUT_DIR, f"X_{split_name}.npy"), X)
     np.save(os.path.join(OUTPUT_DIR, f"y_{split_name}.npy"), y)
 
-    print(f"✅ Saved {split_name} features:")
+    print(f" Saved {split_name} features:")
     print(f"   X shape: {X.shape}")
     print(f"   y shape: {y.shape}")
 
@@ -41,4 +41,4 @@ if __name__ == "__main__":
     for split in ["train", "val", "test"]:
         process_split(split)
 
-    print("\n🎉 All features precomputed and saved!")
+    print("\n All features precomputed and saved!")
