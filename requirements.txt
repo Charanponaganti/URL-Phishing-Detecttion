@@ -1,3 +1,4 @@
+# PhishGuard — Python Dependencies
 numpy
 matplotlib
 seaborn
@@ -6,5 +7,15 @@ scikit_learn
 mlflow
 keras_self_attention
 tensorflow
-
-
+xgboost
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+pandas
+joblib
+requests
+python-whois
+dnspython
+python-dotenv
+aiosqlite

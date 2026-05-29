@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L3 7V12C3 17.55 6.84 22.74 12 24C17.16 22.74 21 17.55 21 12V7L12 2Z" fill="url(#shield-grad)" opacity="0.9"/>
+          <path d="M10 15.5L7.5 13L6.09 14.41L10 18.33L18 10.33L16.59 8.92L10 15.5Z" fill="white"/>
+          <defs>
+            <linearGradient id="shield-grad" x1="3" y1="2" x2="21" y2="24">
+              <stop stop-color="#3b82f6"/>
+              <stop offset="1" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">PhishGuard</span>
+      </div>
+      <span class="version">v1.0</span>
+    </div>
+
+    <!-- Current Page Scan -->
+    <div id="scan-result" class="scan-section">
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Analyzing current page...</p>
+      </div>
+    </div>
+
+    <!-- Manual Scan -->
+    <div class="manual-scan">
+      <input type="text" id="url-input" placeholder="Enter URL to scan..." />
+      <button id="scan-btn" title="Scan URL">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 110-10 5 5 0 010 10z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Dashboard Link -->
+    <a href="http://localhost:5173" target="_blank" class="dashboard-link">
+      Open Analyst Dashboard →
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

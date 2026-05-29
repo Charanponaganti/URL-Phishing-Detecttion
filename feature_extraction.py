@@ -8,25 +8,7 @@ from joblib import Parallel, delayed
 from tqdm import tqdm
 import multiprocessing
 
-# list of features we look at
-feature_names = [
-    "url_length", "domain_length", "path_length", "subdomain_count", "path_depth",
-    "count_dots", "count_hyphens", "count_underscores", "count_slashes",
-    "count_at", "count_question", "count_equals", "count_ampersand",
-    "count_percent", "count_digits",
-    "digit_ratio", "letter_ratio", "special_char_ratio",
-    "url_entropy", "domain_entropy",
-    "has_ip_address", "has_port", "has_https", "has_http", "has_at_symbol",
-    "has_double_slash", "has_dash_in_domain", "is_shortened",
-    "char_repeat_count", "parameter_count",
-]
 
-# common redirect links
-shortener_list = {
-    "bit.ly", "goo.gl", "tinyurl.com", "ow.ly", "t.co",
-    "buff.ly", "rebrand.ly", "cutt.ly", "is.gd", "bl.ink",
-    "short.io", "tiny.cc", "lc.chat", "soo.gd", "s2r.co",
-}
 
 class FeatureExtractor:
     def __init__(self, char_index_path="../dataset/char_index"):
@@ -88,87 +70,4 @@ class FeatureExtractor:
         self._check_loaded()
         return np.array(self.labels, dtype=np.int32)
 
-    def _extract_one(self, url):
-        # get features for 1 url
-        # ensure url has protocol for parsing if it was stripped before
-        parse_url = url if "://" in url else "http://" + url
-        parsed = urlparse(parse_url)
-        domain = parsed.hostname or ""
-        path = parsed.path or ""
-        full = url
-
-        n = len(full)
-        dom_len = len(domain)
-        path_len = len(path)
-
-        # counts
-        num_subdomains = max(domain.count(".") - 1, 0)
-        path_depth = path.count("/")
-        dots = full.count(".")
-        hyphens = full.count("-")
-        underscores = full.count("_")
-        slashes = full.count("/")
-        at = full.count("@")
-        qmarks = full.count("?")
-        equals = full.count("=")
-        amps = full.count("&")
-        pct = full.count("%")
-        digits = sum(c.isdigit() for c in full)
-
-        # ratios
-        digit_ratio = digits / n if n else 0
-        letter_ratio = sum(c.isalpha() for c in full) / n if n else 0
-        special_ratio = sum(not c.isalnum() for c in full) / n if n else 0
-
-        # chaos score
-        url_ent = self._shannon_entropy(full)
-        dom_ent = self._shannon_entropy(domain)
-
-        # flags
-        is_ip = int(bool(re.match(r"^\d{1,3}(\.\d{1,3}){3}$", domain)))
-        has_port = int(parsed.port is not None)
-        is_https = int(parse_url.startswith("https"))
-        is_http = int(parse_url.startswith("http://"))
-        has_at = int("@" in full)
-        double_slash = int("//" in path)
-        dash_in_domain = int("-" in domain)
-        shortened = int(domain in shortener_list)
-
-        # new features to reach 30
-        repeat_count = 0
-        if full:
-            current_repeat = 1
-            for i in range(1, len(full)):
-                if full[i] == full[i-1]:
-                    current_repeat += 1
-                else:
-                    repeat_count = max(repeat_count, current_repeat)
-                    current_repeat = 1
-            repeat_count = max(repeat_count, current_repeat)
-        
-        param_count = len(parsed.query.split('&')) if parsed.query else 0
-
-        return [
-            n, dom_len, path_len, num_subdomains, path_depth,
-            dots, hyphens, underscores, slashes,
-            at, qmarks, equals, amps,
-            pct, digits,
-            digit_ratio, letter_ratio, special_ratio,
-            url_ent, dom_ent,
-            is_ip, has_port, is_https, is_http, has_at,
-            double_slash, dash_in_domain, shortened,
-            repeat_count, param_count
-        ]
-
-    @staticmethod
-    def _shannon_entropy(s):
-        # entropy score
-        if not s: return 0.0
-        freq = {}
-        for c in s: freq[c] = freq.get(c, 0) + 1
-        n = len(s)
-        return -sum((v / n) * np.log2(v / n) for v in freq.values())
-
-    def _check_loaded(self):
-        if not self.urls:
-            raise RuntimeError("load data first!")
+    
