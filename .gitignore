@@ -27,9 +27,11 @@ models/**/*.h5
 *.keras
 *.h5
 
-# ML Artifacts
-ml_pipeline/artifacts/*.joblib
+# ML Artifacts (ignore plots, but KEEP model files for deployment)
 ml_pipeline/artifacts/*.png
+# The following two model files are committed for Render deployment:
+!ml_pipeline/artifacts/xgboost_model.joblib
+!ml_pipeline/artifacts/feature_scaler.joblib
 
 # OS / IDE
 .vscode/

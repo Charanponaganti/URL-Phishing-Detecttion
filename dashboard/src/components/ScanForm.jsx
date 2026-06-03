@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function ScanForm({ onScanComplete }) {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,7 +15,7 @@ function ScanForm({ onScanComplete }) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/scan', {
+      const response = await fetch(`${API_BASE}/api/scan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url.trim() }),

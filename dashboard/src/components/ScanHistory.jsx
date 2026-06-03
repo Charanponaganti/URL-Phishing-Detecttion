@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function ScanHistory({ refreshKey, onSelectScan }) {
   const [history, setHistory] = useState([]);
 
@@ -9,7 +11,7 @@ function ScanHistory({ refreshKey, onSelectScan }) {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/history?limit=10');
+      const response = await fetch(`${API_BASE}/api/history?limit=10`);
       if (response.ok) {
         const data = await response.json();
         setHistory(data);

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function ExportButton() {
   const [exporting, setExporting] = useState(false);
 
   const handleExport = async (format) => {
     setExporting(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/report/export?format=${format}`);
+      const response = await fetch(`${API_BASE}/api/report/export?format=${format}`);
       if (!response.ok) throw new Error('Export failed');
       const data = await response.json();
 
