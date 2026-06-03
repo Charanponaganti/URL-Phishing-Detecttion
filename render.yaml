@@ -19,9 +19,10 @@ services:
       - key: DEBUG
         value: "false"
 
-staticSites:
   # ── React Dashboard (Static Site) ──────────────────────────
-  - name: phishguard-dashboard
+  - type: web
+    name: phishguard-dashboard
+    runtime: static
     rootDir: dashboard
     buildCommand: npm install && npm run build
     staticPublishPath: dist
