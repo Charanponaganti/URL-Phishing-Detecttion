@@ -209,6 +209,33 @@ The React analyst console will compile and open at:
 4. Select the `extension/` folder inside the project root.
 5. The PhishGuard shield icon will appear in your extensions list. It will now automatically inspect tabs and display real-time safety badges!
 
+## Citation
+
+If you use this work in your research, please cite the original paper:
+
+```bibtex
+@article{sahingoz2024dephides,
+  title={DEPHIDES: Deep Learning Based Phishing Detection System},
+  author={Sahingoz, Ozgur Koray and Bayrak, Suleyman and Bulut, Guler},
+  journal={IEEE Access},
+  volume={12},
+  pages={11166--11179},
+  year={2024},
+  publisher={IEEE},
+  doi={10.1109/ACCESS.2024.3352629}
+}
+```
+## Code, Datasets and Resources
+
+Additional codes, datasets and resources can be accessed here:
+[ACCESS ZIP FILES HERE](https://drive.google.com/drive/folders/1fm0BF7NthGBoaQ2qrlfeu7sARIdL1NMK?usp=sharing)
+
+## Implemented By
+
+1. **[Menni Charan Sree Teja](https://github.com/charan-435)**
+2. **[Ponaganti Sai Deva Charan](https://github.com/Charanponaganti)**
+3. **[Lalit Santosh Deshmane](https://github.com/lalitdeshmane10-cloud)**
+
 ---
 
 ## 📊 API Documentation & Schema

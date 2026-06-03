@@ -3,12 +3,14 @@ import numpy as np
 from urllib.parse import urlparse
 
 FEATURE_NAMES = [
+    #structural
     "url_length",
     "domain_length",
     "path_length",
     "subdomain_count",
     "path_depth",
 
+#numerical
     "count_dots",
     "count_hyphens",
     "count_underscores",
@@ -20,13 +22,15 @@ FEATURE_NAMES = [
     "count_percent",
     "count_digits",
 
+#stats
     "digit_ratio",
     "letter_ratio",
     "special_char_ratio",
 
+#entropy
     "url_entropy",
     "domain_entropy",
-
+#binary
     "has_ip_address",
     "has_port",
     "has_https",
@@ -52,6 +56,7 @@ class FeatureExtractor:
 
     # ---------------- LOAD DATA ---------------- #
 
+#stores clean urls with their respective labels
     def load_from_file(self, filepath: str):
         self._urls = []
         self._labels = []
@@ -85,12 +90,14 @@ class FeatureExtractor:
 
     # ---------------- OUTPUT ---------------- #
 
+#returns the X matrix
     def get_handcrafted(self):
         self._check_loaded()
         X = np.array([self._extract_one(url) for url in self._urls], dtype=np.float32)
         print(f"[FeatureExtractor] Feature shape: {X.shape}")
         return X
 
+#Returns the Y matrix/vector
     def get_labels(self):
         self._check_loaded()
         return np.array(self._labels, dtype=np.int32)
@@ -98,12 +105,15 @@ class FeatureExtractor:
     def get_feature_names(self):
         return FEATURE_NAMES
 
-    # ---------------- CORE FEATURE LOGIC ---------------- #
+    # feature vector for a given url 
 
     def _extract_one(self, url: str):
+        #parsing
         parse_url = "http://" + url
+        
         parsed = urlparse(parse_url)
-
+ 
+ #feature calculation
         domain = parsed.hostname or ""
         path = parsed.path or ""
         full = url
