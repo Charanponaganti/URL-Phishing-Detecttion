@@ -35,7 +35,12 @@ class Settings(BaseSettings):
     database_url: str = str(PROJECT_ROOT / "backend" / "phishguard.db")
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000", "chrome-extension://*"]
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://phishguard-dashboard.onrender.com",
+        "chrome-extension://*",
+    ]
 
 
 settings = Settings()

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 function RiskDistribution({ refreshKey }) {
   const [stats, setStats] = useState(null);
   const [chartType, setChartType] = useState('bar');
@@ -11,7 +13,7 @@ function RiskDistribution({ refreshKey }) {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/history/stats');
+      const response = await fetch(`${API_BASE}/api/history/stats`);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
